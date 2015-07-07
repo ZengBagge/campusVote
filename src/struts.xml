@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE struts PUBLIC  
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"  
+    "http://struts.apache.org/dtds/struts-2.3.dtd">  
+      
+<struts>  
+    <constant name="struts.i18n.encoding" value="UTF-8" />  
+     <constant name="struts.enable.DynamicMethodInvocation" value="true"></constant> <!-- 打开！动态action -->
+<constant name="struts.devMode" value="false"></constant>
+<constant name="struts.objectFactory" value="spring"></constant>
+<constant name="struts.multipart.maxSize" value="6291456"/><!--上传文件大小限制  -->
+    <package name="main" namespace="/" extends="json-default" > 
+  
+         <interceptors>  
+       <!-- 浏览器拦截器 -->
+      <interceptor name="Interceptor" class="mobileInterceptor"></interceptor>    
+      <interceptor-stack name="MobileStack">       
+       <interceptor-ref name="Interceptor"/>
+        <interceptor-ref name="defaultStack"/>    <!-- 必需引用这个，否则点下一个子ACTION会报错 -->
+      </interceptor-stack>     
+       <!--登录拦截器 -->
+       <interceptor name="LoginInterceptor" class="clientLoginInterception"></interceptor>    
+      <interceptor-stack name="LoginStack">       
+       <interceptor-ref name="LoginInterceptor"/>
+        <interceptor-ref name="defaultStack"/>    <!-- 必需引用这个，否则点下一个子ACTION会报错 -->
+      </interceptor-stack>     
+    </interceptors>  
+ 
+         <global-results>  
+           <result name="browserError">/WEB-INF/browserError.jsp</result>
+           <result name="ClientLogin"  type="redirect" >/user!login</result>
+            <result name="error">/WEB-INF/Error.jsp</result>
+        </global-results> 
+        <action name="index" class="indexAction">  
+            <result name="index">/WEB-INF/mobile/index.jsp</result>
+        </action>
+         <action name="user" class="userAction">  
+            <result name="login">/WEB-INF/user/login.jsp</result>
+            <result name="success">/WEB-INF/user/login_result.jsp</result>
+        </action>
+           <action name="userCenter" class="userCenterAction">  
+            <result name="mycenter">/WEB-INF/user/myCenter.jsp</result>
+            <result name="voteInfo">/WEB-INF/user/voteInfo.jsp</result>
+            <interceptor-ref name="LoginStack" /> <!-- 使用登录拦截器 -->
+        </action>
+              <action name="voteManage" class="voteManageAction">  
+            <result name="addVoteProject">/WEB-INF/vote/addProject.jsp</result>
+            <result name="edit">/WEB-INF/vote/editProject.jsp</result>
+             <result name="apply">/WEB-INF/vote/apply.jsp</result>
+             <result name="pictureApply">/WEB-INF/vote/pictureApply.jsp</result>
+             <result name="teamApply">/WEB-INF/vote/teamApply.jsp</result>
+             <result name="wordApply">/WEB-INF/vote/wordApply.jsp</result>
+             <result name="myproject">/WEB-INF/vote/myProject.jsp</result>
+                 <result name="allUser">/WEB-INF/vote/allUserManage.jsp</result>
+             <result name="result">/WEB-INF/vote/result.jsp</result>
+            <interceptor-ref name="LoginStack" /> <!-- 使用登录拦截器 -->
+        </action>
+              <action name="questionnaireManage" class="questionnaireManageAction">  
+            <result name="addQuestionnaireProject">/WEB-INF/questionnaire/addProject.jsp</result>
+              <result name="edit">/WEB-INF/questionnaire/editQuestionnaire.jsp</result>
+             <result name="apply">/WEB-INF/questionnaire/apply.jsp</result>
+                <result name="allQuestion">/WEB-INF/questionnaire/allQuestionManage.jsp</result>
+             <result name="myproject">/WEB-INF/questionnaire/myProject.jsp</result>
+                <result name="projectResult">/WEB-INF/questionnaire/projectResult.jsp</result>
+            <interceptor-ref name="LoginStack" /> <!-- 使用登录拦截器 -->
+        </action>
+          <action name="vote" class="voteAction">  
+            <result name="index">/WEB-INF/vote/index.jsp</result>
+                <result name="allUser">/WEB-INF/vote/allUser.jsp</result>
+                     <result name="project">/WEB-INF/vote/project.jsp</result>
+                     <result name="wordProject">/WEB-INF/vote/wordProject.jsp</result>     
+        </action>
+              <action name="questionnaire" class="questionnaireAction">  
+            <result name="project">/WEB-INF/questionnaire/project.jsp</result>
+            <result name="index">/WEB-INF/questionnaire/index.jsp</result>
+        </action>
+        
+         <action name="circle" class="circleAction">  
+            <result name="index">/WEB-INF/circle/index.jsp</result>
+        </action>
+              <action name="circleManage" class="circleManageAction">  
+            <result name="index">/WEB-INF/circle/publish.jsp</result>
+            <interceptor-ref name="LoginStack" /> <!-- 使用登录拦截器 -->
+        </action>
+        
+              <action name="voteType" class="voteTypeAction">  
+              <interceptor-ref name="LoginStack" /> <!-- 使用登录拦截器 -->
+              </action>
+              
+              <action name="fileUpload" class="fileUploadAction">  
+               <result type="json" name="success">
+               <param name="contentType">
+                    text/html
+                </param>
+                <param name="includeProperties">fileFileName,msg</param>
+            </result>
+            <result type="json" name="error">
+                <param name="contentType">
+                    text/html
+                </param>
+                <param name="includeProperties">msg</param>
+             </result>
+             
+              </action>
+        <action name="personVote" class="personVoteAction">  
+        </action>    
+         <action name="voteCon" class="voteConAction">  
+        </action>     
+          <action name="wordVote" class="wordVoteAction">  
+        </action> 
+            <action name="questionnaireAnswer" class="questionnaireAnswerAction">  
+        </action>   
+           <action name="discuzPortal" class="discuzPortalAction">  
+           <result name="index">/WEB-INF/discuz/portal/index.jsp</result>
+           <result name="type">/WEB-INF/discuz/portal/type.jsp</result>
+           <result name="circle">/WEB-INF/discuz/portal/circle.jsp</result>
+            <result name="circleArticle">/WEB-INF/discuz/portal/circleArticle.jsp</result>
+          </action>   
+             <action name="discuzForum" class="discuzForumAction">  
+             <result name="editArticle">/WEB-INF/discuz/forum/editArticle.jsp</result>
+              <interceptor-ref name="LoginStack" /> <!-- 使用登录拦截器 -->
+        </action>   
+    </package>  
+      
+</struts>   
